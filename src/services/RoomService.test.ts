@@ -40,7 +40,7 @@ describe('RoomService', () => {
   it('should get room by ID', async () => {
     vi.mocked(roomRepository.getRoomById).mockResolvedValueOnce(testRoom);
 
-    const room = await roomService.getRoomById('');
+    const room = await roomService.getRoomById(testRoom.id);
 
     expect(room).toEqual(testRoom);
   });
@@ -48,7 +48,7 @@ describe('RoomService', () => {
   it('should throw error if unable to get room by ID', () => {
     vi.mocked(roomRepository.getRoomById).mockRejectedValueOnce(new Error());
 
-    expect(() => roomService.getRoomById('')).rejects.toThrowError(roomErrors.UNABLE_TO_GET_ROOM);
+    expect(() => roomService.getRoomById(testRoom.id)).rejects.toThrowError(roomErrors.UNABLE_TO_GET_ROOM);
   });
 
   it('should create room', async () => {
