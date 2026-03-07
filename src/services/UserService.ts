@@ -46,15 +46,15 @@ export class UserService {
     emailAddress: string;
     password: string;
   }) {
-    const isEmailInUse = await this.isEmailInUse(emailAddress);
+    const isEmailAvailable = await this.isEmailAvailable(emailAddress);
 
-    if (!isEmailInUse) {
+    if (!isEmailAvailable) {
       throw new Error(userErrors.LIMIT_ONE_USER_PER_EMAIL);
     }
 
-    const isUsernameTaken = await this.isUsernameTaken(username);
+    const isUsernameAvailable = await this.isUsernameAvailable(username);
 
-    if (!isUsernameTaken) {
+    if (!isUsernameAvailable) {
       throw new Error(userErrors.USERNAME_NOT_AVAILABLE);
     }
 
@@ -104,15 +104,15 @@ export class UserService {
     }
   }
 
-  private async isUsernameTaken(username: string) {
+  private async isUsernameAvailable(username: string) {
     const user = await this.userRepository.getUserByUsername(username);
 
-    return user !== null;
+    return user === null;
   };
 
-  private async isEmailInUse(emailAddress: string) {
+  private async isEmailAvailable(emailAddress: string) {
     const user = await this.userRepository.getUserByEmailAddress(emailAddress);
 
-    return user !== null;
+    return user === null;
   }
 }
