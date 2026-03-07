@@ -90,7 +90,7 @@ export class UserService {
     const updatedAt = this.dateTimeProvider.now();
 
     try {
-      return await this.userRepository.createUser({
+      return await this.userRepository.updateUser({
         id,
         username: user.username,
         displayName,
