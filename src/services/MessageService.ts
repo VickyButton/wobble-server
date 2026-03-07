@@ -21,19 +21,35 @@ export class MessageService {
   }
 
   public async getMessagesByParentId(parentId: string) {
-    return await this.messageRepository.getMessagesByParentId(parentId);
+    try {
+      return await this.messageRepository.getMessagesByParentId(parentId);
+    } catch {
+      throw new Error(messageErrors.UNABLE_TO_GET_MESSAGE);
+    }
   }
 
   public async getMessagesByUserId(userId: string) {
-    return await this.messageRepository.getMessagesByUserId(userId);
+    try {
+      return await this.messageRepository.getMessagesByUserId(userId);
+    } catch {
+      throw new Error(messageErrors.UNABLE_TO_GET_MESSAGE);
+    }
   }
 
   public async getMessagesByRoomId(roomId: string) {
-    return await this.messageRepository.getMessagesByRoomId(roomId);
+    try {
+      return await this.messageRepository.getMessagesByRoomId(roomId);
+    } catch {
+      throw new Error(messageErrors.UNABLE_TO_GET_MESSAGE);
+    }
   }
 
   public async getMessageById(id: string) {
-    return await this.messageRepository.getMessageById(id);
+    try {
+      return await this.messageRepository.getMessageById(id);
+    } catch {
+      throw new Error(messageErrors.UNABLE_TO_GET_MESSAGE);
+    }
   }
 
   public async createMessage({ parentId, userId, roomId, body }: {
