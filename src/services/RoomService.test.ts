@@ -38,11 +38,17 @@ describe('RoomService', () => {
   });
 
   it('should get room by ID', async () => {
-    vi.mocked(roomRepository.getRoomById).mockReturnValueOnce(Promise.resolve(testRoom));
+    vi.mocked(roomRepository.getRoomById).mockResolvedValueOnce(testRoom);
 
     const room = await roomService.getRoomById('');
 
     expect(room).toEqual(testRoom);
+  });
+
+  it('should throw error if unable to get room by ID', async () => {
+    vi.mocked(roomRepository.getRoomById).mockRejectedValueOnce(new Error());
+
+    expect(() => roomService.getRoomById('')).rejects.toThrowError(roomErrors.UNABLE_TO_GET_ROOM);
   });
 
   it('should create room', async () => {
@@ -68,7 +74,7 @@ describe('RoomService', () => {
   });
 
   it('should update room', async () => {
-    vi.mocked(roomRepository.getRoomById).mockReturnValueOnce(testRoom);
+    vi.mocked(roomRepository.getRoomById).mockResolvedValueOnce(testRoom);
     vi.mocked(dateTimeProvider.now).mockReturnValueOnce(testRoom.createdAt);
     vi.mocked(roomRepository.updateRoom).mockImplementation((room) => room);
 
@@ -88,7 +94,7 @@ describe('RoomService', () => {
   });
 
   it('should throw error if unable to update room', async () => {
-    vi.mocked(roomRepository.getRoomById).mockReturnValueOnce(testRoom);
+    vi.mocked(roomRepository.getRoomById).mockResolvedValueOnce(testRoom);
     vi.mocked(dateTimeProvider.now).mockReturnValueOnce(testRoom.createdAt);
     vi.mocked(roomRepository.updateRoom).mockRejectedValueOnce(new Error());
 

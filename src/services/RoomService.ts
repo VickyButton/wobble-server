@@ -25,7 +25,11 @@ export class RoomService {
   }
 
   public async getRoomById(id: string) {
-    return await this.roomRepository.getRoomById(id);
+    try {
+      return await this.roomRepository.getRoomById(id);
+    } catch {
+      throw new Error(roomErrors.UNABLE_TO_GET_ROOM);
+    }
   }
 
   public async createRoom({ name }: {
