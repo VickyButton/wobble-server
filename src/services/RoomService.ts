@@ -4,11 +4,11 @@ import type { MessageRepository } from '../repositories/MessageRepository';
 import type { RoomRepository } from '../repositories/RoomRepository';
 
 export const roomErrors = {
+  UNABLE_TO_GET_ROOM: 'UNABLE_TO_GET_ROOM',
   UNABLE_TO_CREATE_ROOM: 'UNABLE_TO_CREATE_ROOM',
   UNABLE_TO_UPDATE_ROOM: 'UNABLE_TO_UPDATE_ROOM',
   UNABLE_TO_DELETE_ROOM: 'UNABLE_TO_DELETE_ROOM',
   UNABLE_TO_DELETE_ROOM_MESSAGES: 'UNABLE_TO_DELETE_ROOM_MESSAGES',
-  UNABLE_TO_GET_ROOM: 'UNABLE_TO_GET_ROOM',
 };
 
 export class RoomService {
