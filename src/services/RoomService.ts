@@ -71,12 +71,6 @@ export class RoomService {
   }
 
   public async deleteRoom(id: string) {
-    const room = await this.roomRepository.getRoomById(id);
-
-    if (!room) {
-      throw new Error(roomErrors.UNABLE_TO_GET_ROOM);
-    }
-
     try {
       await this.messageRepository.deleteMessagesByRoomId(id);
     } catch {
