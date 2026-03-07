@@ -34,10 +34,6 @@ export class UserService {
     return await this.userRepository.getUserByUsername(username);
   }
 
-  public async getUserByDisplayName(displayName: string) {
-    return await this.userRepository.getUserByDisplayName(displayName);
-  }
-
   public async getUserByEmailAddress(emailAddress: string) {
     return await this.userRepository.getUserByEmailAddress(emailAddress);
   }
