@@ -6,6 +6,7 @@ import type { UserRepository } from '../repositories/UserRepository';
 export const userErrors = {
   LIMIT_ONE_USER_PER_EMAIL: 'LIMIT_ONE_USER_PER_EMAIL',
   USERNAME_NOT_AVAILABLE: 'USERNAME_NOT_AVAILABLE',
+  UNABLE_TO_CREATE_USER: 'UNABLE_TO_CREATE_USER',
 };
 
 export class UserService {
@@ -64,15 +65,19 @@ export class UserService {
     const createdAt = this.dateTimeProvider.now();
     const updatedAt = createdAt;
 
-    return await this.userRepository.createUser({
-      id,
-      username,
-      displayName,
-      emailAddress,
-      passwordHash,
-      createdAt,
-      updatedAt,
-    });
+    try {
+      return await this.userRepository.createUser({
+        id,
+        username,
+        displayName,
+        emailAddress,
+        passwordHash,
+        createdAt,
+        updatedAt,
+      });
+    } catch {
+      throw new Error(userErrors.UNABLE_TO_CREATE_USER);
+    }
   }
 
   private async isUsernameTaken(username: string) {
