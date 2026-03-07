@@ -7,6 +7,7 @@ export interface MessageRepository {
   getMessageById(id: string): Promise<Message | null>;
   createMessage(message: Message): Promise<Message>;
   updateMessage(message: Message): Promise<Message>;
+  deleteMessagesByUserId(userId: string): Promise<boolean>;
   deleteMessagesByRoomId(roomId: string): Promise<boolean>;
   deleteMessage(id: string): Promise<boolean>;
 }

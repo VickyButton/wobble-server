@@ -87,6 +87,14 @@ export class MessageService {
     }
   }
 
+  public async deleteMessagesByUserId(userId: string) {
+    try {
+      return await this.messageRepository.deleteMessagesByUserId(userId);
+    } catch {
+      throw new Error(messageErrors.UNABLE_TO_DELETE_MESSAGE);
+    }
+  }
+
   public async deleteMessagesByRoomId(roomId: string) {
     try {
       return await this.messageRepository.deleteMessagesByRoomId(roomId);
