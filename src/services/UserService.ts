@@ -6,7 +6,9 @@ import type { UserRepository } from '../repositories/UserRepository';
 export const userErrors = {
   LIMIT_ONE_USER_PER_EMAIL: 'LIMIT_ONE_USER_PER_EMAIL',
   USERNAME_NOT_AVAILABLE: 'USERNAME_NOT_AVAILABLE',
+  UNABLE_TO_GET_USER: 'UNABLE_TO_GET_USER',
   UNABLE_TO_CREATE_USER: 'UNABLE_TO_CREATE_USER',
+  UNABLE_TO_UPDATE_USER: 'UNABLE_TO_UPDATE_USER',
 };
 
 export class UserService {
@@ -73,6 +75,32 @@ export class UserService {
       });
     } catch {
       throw new Error(userErrors.UNABLE_TO_CREATE_USER);
+    }
+  }
+
+  public async updateUser(id: string, { displayName }: {
+    displayName: string;
+  }) {
+    const user = await this.userRepository.getUserById(id);
+
+    if (!user) {
+      throw new Error(userErrors.UNABLE_TO_GET_USER);
+    }
+
+    const updatedAt = this.dateTimeProvider.now();
+
+    try {
+      return await this.userRepository.createUser({
+        id,
+        username: user.username,
+        displayName,
+        emailAddress: user.emailAddress,
+        passwordHash: user.passwordHash,
+        createdAt: user.createdAt,
+        updatedAt,
+      });
+    } catch {
+      throw new Error(userErrors.UNABLE_TO_UPDATE_USER);
     }
   }
 
