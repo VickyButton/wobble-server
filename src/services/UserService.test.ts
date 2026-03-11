@@ -1,5 +1,5 @@
 import { userErrors, UserService } from './UserService';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 const idProvider = {
   generateId: vi.fn(),
@@ -31,6 +31,10 @@ const testUser = {
 };
 
 describe('UserService', () => {
+  afterEach(() => {
+    vi.resetAllMocks();
+  });
+
   it('should get users', async () => {
     vi.mocked(userRepository.getUsers).mockResolvedValueOnce([testUser]);
 
