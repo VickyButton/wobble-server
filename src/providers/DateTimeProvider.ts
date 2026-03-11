@@ -1,3 +1,3 @@
 export interface DateTimeProvider {
-  now(): number;
+  get now(): number;
 }

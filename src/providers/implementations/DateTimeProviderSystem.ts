@@ -1,7 +1,7 @@
 import type { DateTimeProvider } from '../DateTimeProvider';
 
 export class DateTimeProviderSystem implements DateTimeProvider {
-  public now() {
+  public get now() {
     return Date.now();
   }
 }
