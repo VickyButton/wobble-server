@@ -1,4 +1,5 @@
 interface Config {
+  serverPort: number;
   secretKey: string;
 }
 
