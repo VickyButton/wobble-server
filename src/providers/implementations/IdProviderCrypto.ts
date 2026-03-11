@@ -1,7 +1,7 @@
 import type { IdProvider } from '../IdProvider';
 import crypto from 'crypto';
 
-export class IdProviderHexadecimal implements IdProvider {
+export class IdProviderCrypto implements IdProvider {
   public generateId() {
     return this.generateHexadecimalString(16);
   }
