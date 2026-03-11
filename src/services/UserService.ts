@@ -11,6 +11,17 @@ export const userErrors = {
   UNABLE_TO_UPDATE_USER: 'UNABLE_TO_UPDATE_USER',
 };
 
+export interface CreateUserOptions {
+  username: string;
+  displayName: string;
+  emailAddress: string;
+  password: string;
+}
+
+export interface UpdateUserOptions {
+  displayName: string;
+}
+
 export class UserService {
   private readonly idProvider: IdProvider;
   private readonly passwordProvider: PasswordProvider;
@@ -40,12 +51,7 @@ export class UserService {
     return await this.userRepository.getUserByEmailAddress(emailAddress);
   }
 
-  public async createUser({ username, displayName, emailAddress, password }: {
-    username: string;
-    displayName: string;
-    emailAddress: string;
-    password: string;
-  }) {
+  public async createUser({ username, displayName, emailAddress, password }: CreateUserOptions) {
     const isEmailAvailable = await this.isEmailAvailable(emailAddress);
 
     if (!isEmailAvailable) {
@@ -78,9 +84,7 @@ export class UserService {
     }
   }
 
-  public async updateUser(id: string, { displayName }: {
-    displayName: string;
-  }) {
+  public async updateUser(id: string, { displayName }: UpdateUserOptions) {
     const user = await this.userRepository.getUserById(id);
 
     if (!user) {
