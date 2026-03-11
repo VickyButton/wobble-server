@@ -60,7 +60,7 @@ export class UserService {
 
     const id = this.idProvider.generateId();
     const passwordHash = await this.passwordProvider.hashPassword(password);
-    const createdAt = this.dateTimeProvider.now();
+    const createdAt = this.dateTimeProvider.now;
     const updatedAt = createdAt;
 
     try {
@@ -87,7 +87,7 @@ export class UserService {
       throw new Error(userErrors.UNABLE_TO_GET_USER);
     }
 
-    const updatedAt = this.dateTimeProvider.now();
+    const updatedAt = this.dateTimeProvider.now;
 
     try {
       return await this.userRepository.updateUser({

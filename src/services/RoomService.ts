@@ -36,7 +36,7 @@ export class RoomService {
     name: string;
   }) {
     const id = this.idProvider.generateId();
-    const createdAt = this.dateTimeProvider.now();
+    const createdAt = this.dateTimeProvider.now;
     const updatedAt = createdAt;
 
     try {
@@ -60,7 +60,7 @@ export class RoomService {
       throw new Error(roomErrors.UNABLE_TO_GET_ROOM);
     }
 
-    const updatedAt = this.dateTimeProvider.now();
+    const updatedAt = this.dateTimeProvider.now;
 
     try {
       return await this.roomRepository.updateRoom({

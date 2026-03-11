@@ -59,7 +59,7 @@ export class MessageService {
     body: string;
   }) {
     const id = this.idProvider.generateId();
-    const createdAt = this.dateTimeProvider.now();
+    const createdAt = this.dateTimeProvider.now;
     const updatedAt = createdAt;
 
     try {
@@ -86,7 +86,7 @@ export class MessageService {
       throw new Error(messageErrors.UNABLE_TO_GET_MESSAGE);
     }
 
-    const updatedAt = this.dateTimeProvider.now();
+    const updatedAt = this.dateTimeProvider.now;
 
     try {
       return await this.messageRepository.updateMessage({
