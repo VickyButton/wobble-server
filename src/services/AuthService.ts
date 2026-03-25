@@ -10,6 +10,11 @@ export const authErrors = {
 
 const AUTH_TOKEN_EXPIRES_IN = 60 * 60 * 24 * 7; // 1 week
 
+export interface AuthenticateUserOptions {
+  username: string;
+  password: string;
+}
+
 export class AuthService {
   private readonly authTokenProvider: AuthTokenProvider;
   private readonly passwordProvider: PasswordProvider;
@@ -21,10 +26,7 @@ export class AuthService {
     this.userRepository = userRepository;
   }
 
-  public async authenticateUser({ username, password }: {
-    username: string;
-    password: string;
-  }) {
+  public async authenticateUser({ username, password }: AuthenticateUserOptions) {
     const user = await this.userRepository.getUserByUsername(username);
 
     if (!user) {

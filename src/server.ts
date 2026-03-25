@@ -1,3 +1,4 @@
+import { AuthControllerH3 } from './controllers/implementations/AuthControllerH3';
 import { UserControllerH3 } from './controllers/implementations/UserControllerH3';
 import { AuthTokenProviderJwt } from './providers/implementations/AuthTokenProviderJwt';
 import { DateTimeProviderSystem } from './providers/implementations/DateTimeProviderSystem';
@@ -11,6 +12,7 @@ import { MessageService } from './services/MessageService';
 import { RoomService } from './services/RoomService';
 import { UserService } from './services/UserService';
 import { useConfig } from './utils/useConfig';
+import { AuthValidatorZod } from './validators/implementations/AuthValidatorZod';
 import { UserValidatorZod } from './validators/implementations/UserValidatorZod';
 import { H3, serve } from 'h3';
 
@@ -32,7 +34,6 @@ export function createServer(): Server {
   const passwordProvider = new PasswordProviderBcrypt();
 
   /* Services */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const authService = new AuthService(authTokenProvider, passwordProvider, userRepository);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const messageService = new MessageService(idProvider, dateTimeProvider, messageRepository);
@@ -41,9 +42,11 @@ export function createServer(): Server {
   const userService = new UserService(idProvider, passwordProvider, dateTimeProvider, userRepository);
 
   /* Validators */
+  const authValidator = new AuthValidatorZod();
   const userValidator = new UserValidatorZod();
 
   /* Controllers */
+  const authController = new AuthControllerH3(authService, authValidator);
   const userController = new UserControllerH3(userService, userValidator);
   // TODO: Implement remaining controllers
 
@@ -51,6 +54,9 @@ export function createServer(): Server {
 
   return {
     setup() {
+      /* Auth */
+      app.post('/auth', authController.authenticateUser);
+      /* Users */
       app.get('/users', userController.getUsers);
       app.post('/users', userController.createUser);
       app.get('/users/:id', userController.getUserById);
