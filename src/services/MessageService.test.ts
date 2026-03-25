@@ -42,10 +42,10 @@ describe('MessageService', () => {
     expect(messages[0]).toEqual(testMessage);
   });
 
-  it('should throw an error if unable to get messages by parent ID', () => {
+  it('should throw an error if unable to get messages by parent ID', async () => {
     vi.mocked(messageRepository.getMessagesByParentId).mockRejectedValueOnce(new Error());
 
-    expect(() => messageService.getMessagesByParentId(testMessage.parentId)).rejects.toThrowError(messageErrors.UNABLE_TO_GET_MESSAGE);
+    await expect(() => messageService.getMessagesByParentId(testMessage.parentId)).rejects.toThrowError(messageErrors.UNABLE_TO_GET_MESSAGE);
   });
 
   it('should get messages by user ID', async () => {
@@ -56,10 +56,10 @@ describe('MessageService', () => {
     expect(messages[0]).toEqual(testMessage);
   });
 
-  it('should throw an error if unable to get messages by user ID', () => {
+  it('should throw an error if unable to get messages by user ID', async () => {
     vi.mocked(messageRepository.getMessagesByUserId).mockRejectedValueOnce(new Error());
 
-    expect(() => messageService.getMessagesByUserId(testMessage.userId)).rejects.toThrowError(messageErrors.UNABLE_TO_GET_MESSAGE);
+    await expect(() => messageService.getMessagesByUserId(testMessage.userId)).rejects.toThrowError(messageErrors.UNABLE_TO_GET_MESSAGE);
   });
 
   it('should get messages by room ID', async () => {
@@ -70,10 +70,10 @@ describe('MessageService', () => {
     expect(messages[0]).toEqual(testMessage);
   });
 
-  it('should throw an error if unable to get messages by room ID', () => {
+  it('should throw an error if unable to get messages by room ID', async () => {
     vi.mocked(messageRepository.getMessagesByRoomId).mockRejectedValueOnce(new Error());
 
-    expect(() => messageService.getMessagesByRoomId(testMessage.roomId)).rejects.toThrowError(messageErrors.UNABLE_TO_GET_MESSAGE);
+    await expect(() => messageService.getMessagesByRoomId(testMessage.roomId)).rejects.toThrowError(messageErrors.UNABLE_TO_GET_MESSAGE);
   });
 
   it('should get message by ID', async () => {
@@ -84,10 +84,10 @@ describe('MessageService', () => {
     expect(message).toEqual(testMessage);
   });
 
-  it('should throw an error if unable to get message by ID', () => {
+  it('should throw an error if unable to get message by ID', async () => {
     vi.mocked(messageRepository.getMessageById).mockRejectedValueOnce(new Error());
 
-    expect(() => messageService.getMessageById(testMessage.id)).rejects.toThrowError(messageErrors.UNABLE_TO_GET_MESSAGE);
+    await expect(() => messageService.getMessageById(testMessage.id)).rejects.toThrowError(messageErrors.UNABLE_TO_GET_MESSAGE);
   });
 
   it('should create message', async () => {
@@ -104,11 +104,11 @@ describe('MessageService', () => {
     expect(message).toEqual(testMessage);
   });
 
-  it('should throw error if unable to create message', () => {
+  it('should throw error if unable to create message', async () => {
     vi.mocked(idProvider.generateId).mockReturnValueOnce(testMessage.id);
     vi.mocked(messageRepository.createMessage).mockRejectedValueOnce(new Error());
 
-    expect(() => messageService.createMessage({
+    await expect(() => messageService.createMessage({
       parentId: testMessage.parentId,
       userId: testMessage.userId,
       roomId: testMessage.roomId,
@@ -130,7 +130,7 @@ describe('MessageService', () => {
   it('should throw error if message being updated cannot be found', async () => {
     vi.mocked(messageRepository.getMessageById).mockResolvedValueOnce(null);
 
-    expect(() => messageService.updateMessage(testMessage.id, {
+    await expect(() => messageService.updateMessage(testMessage.id, {
       body: testMessage.body,
     })).rejects.toThrowError(messageErrors.UNABLE_TO_GET_MESSAGE);
   });
@@ -139,7 +139,7 @@ describe('MessageService', () => {
     vi.mocked(messageRepository.getMessageById).mockResolvedValueOnce(testMessage);
     vi.mocked(messageRepository.updateMessage).mockRejectedValueOnce(new Error());
 
-    expect(() => messageService.updateMessage(testMessage.id, {
+    await expect(() => messageService.updateMessage(testMessage.id, {
       body: testMessage.body,
     })).rejects.toThrowError(messageErrors.UNABLE_TO_UPDATE_MESSAGE);
   });
@@ -155,7 +155,7 @@ describe('MessageService', () => {
   it('should throw error if unable to delete messages by user ID', async () => {
     vi.mocked(messageRepository.deleteMessagesByUserId).mockRejectedValueOnce(new Error());
 
-    expect(() => messageService.deleteMessagesByUserId(testMessage.userId)).rejects.toThrowError(messageErrors.UNABLE_TO_DELETE_MESSAGE);
+    await expect(() => messageService.deleteMessagesByUserId(testMessage.userId)).rejects.toThrowError(messageErrors.UNABLE_TO_DELETE_MESSAGE);
   });
 
   it('should delete messages by room ID', async () => {
@@ -169,7 +169,7 @@ describe('MessageService', () => {
   it('should throw error if unable to delete messages by room ID', async () => {
     vi.mocked(messageRepository.deleteMessagesByRoomId).mockRejectedValueOnce(new Error());
 
-    expect(() => messageService.deleteMessagesByRoomId(testMessage.roomId)).rejects.toThrowError(messageErrors.UNABLE_TO_DELETE_MESSAGE);
+    await expect(() => messageService.deleteMessagesByRoomId(testMessage.roomId)).rejects.toThrowError(messageErrors.UNABLE_TO_DELETE_MESSAGE);
   });
 
   it('should delete message', async () => {
@@ -183,6 +183,6 @@ describe('MessageService', () => {
   it('should throw error if unable to delete message', async () => {
     vi.mocked(messageRepository.deleteMessage).mockRejectedValueOnce(new Error());
 
-    expect(() => messageService.deleteMessage(testMessage.id)).rejects.toThrowError(messageErrors.UNABLE_TO_DELETE_MESSAGE);
+    await expect(() => messageService.deleteMessage(testMessage.id)).rejects.toThrowError(messageErrors.UNABLE_TO_DELETE_MESSAGE);
   });
 });

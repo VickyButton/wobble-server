@@ -45,10 +45,10 @@ describe('RoomService', () => {
     expect(room).toEqual(testRoom);
   });
 
-  it('should throw error if unable to get room by ID', () => {
+  it('should throw error if unable to get room by ID', async () => {
     vi.mocked(roomRepository.getRoomById).mockRejectedValueOnce(new Error());
 
-    expect(() => roomService.getRoomById(testRoom.id)).rejects.toThrowError(roomErrors.UNABLE_TO_GET_ROOM);
+    await expect(() => roomService.getRoomById(testRoom.id)).rejects.toThrowError(roomErrors.UNABLE_TO_GET_ROOM);
   });
 
   it('should create room', async () => {
@@ -62,11 +62,11 @@ describe('RoomService', () => {
     expect(room).toEqual(testRoom);
   });
 
-  it('should throw error if unable to create room', () => {
+  it('should throw error if unable to create room', async () => {
     vi.mocked(idProvider.generateId).mockReturnValueOnce(testRoom.id);
     vi.mocked(roomRepository.createRoom).mockRejectedValueOnce(new Error());
 
-    expect(() => roomService.createRoom({
+    await expect(() => roomService.createRoom({
       name: testRoom.name,
     })).rejects.toThrowError(roomErrors.UNABLE_TO_CREATE_ROOM);
   });
@@ -82,19 +82,19 @@ describe('RoomService', () => {
     expect(room).toEqual(testRoom);
   });
 
-  it('should throw error if room being updated cannot be found', () => {
+  it('should throw error if room being updated cannot be found', async () => {
     vi.mocked(roomRepository.getRoomById).mockResolvedValueOnce(null);
 
-    expect(() => roomService.updateRoom(testRoom.id, {
+    await expect(() => roomService.updateRoom(testRoom.id, {
       name: testRoom.name,
     })).rejects.toThrowError(roomErrors.UNABLE_TO_GET_ROOM);
   });
 
-  it('should throw error if unable to update room', () => {
+  it('should throw error if unable to update room', async () => {
     vi.mocked(roomRepository.getRoomById).mockResolvedValueOnce(testRoom);
     vi.mocked(roomRepository.updateRoom).mockRejectedValueOnce(new Error());
 
-    expect(() => roomService.updateRoom(testRoom.id, {
+    await expect(() => roomService.updateRoom(testRoom.id, {
       name: testRoom.name,
     })).rejects.toThrowError(roomErrors.UNABLE_TO_UPDATE_ROOM);
   });
@@ -108,16 +108,16 @@ describe('RoomService', () => {
     expect(isDeleted).toBe(true);
   });
 
-  it('should throw error if unable to delete room messages', () => {
+  it('should throw error if unable to delete room messages', async () => {
     vi.mocked(messageRepository.deleteMessagesByRoomId).mockRejectedValueOnce(new Error());
 
-    expect(() => roomService.deleteRoom(testRoom.id)).rejects.toThrowError(roomErrors.UNABLE_TO_DELETE_ROOM_MESSAGES);
+    await expect(() => roomService.deleteRoom(testRoom.id)).rejects.toThrowError(roomErrors.UNABLE_TO_DELETE_ROOM_MESSAGES);
   });
 
-  it('should throw error if unable to delete room', () => {
+  it('should throw error if unable to delete room', async () => {
     vi.mocked(messageRepository.deleteMessagesByRoomId).mockResolvedValueOnce();
     vi.mocked(roomRepository.deleteRoom).mockRejectedValueOnce(new Error());
 
-    expect(() => roomService.deleteRoom(testRoom.id)).rejects.toThrowError(roomErrors.UNABLE_TO_DELETE_ROOM);
+    await expect(() => roomService.deleteRoom(testRoom.id)).rejects.toThrowError(roomErrors.UNABLE_TO_DELETE_ROOM);
   });
 });

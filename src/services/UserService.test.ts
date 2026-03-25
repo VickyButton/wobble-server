@@ -84,10 +84,10 @@ describe('UserService', () => {
     expect(user).toEqual(testUser);
   });
 
-  it('should throw error if user with email address already exists', () => {
+  it('should throw error if user with email address already exists', async () => {
     vi.mocked(userRepository.getUserByEmailAddress).mockResolvedValueOnce(testUser);
 
-    expect(() => userService.createUser({
+    await expect(() => userService.createUser({
       username: testUser.username,
       displayName: testUser.displayName,
       emailAddress: testUser.emailAddress,
@@ -95,11 +95,11 @@ describe('UserService', () => {
     })).rejects.toThrowError(userErrors.LIMIT_ONE_USER_PER_EMAIL);
   });
 
-  it('should throw error if user with username already exists', () => {
+  it('should throw error if user with username already exists', async () => {
     vi.mocked(userRepository.getUserByEmailAddress).mockResolvedValueOnce(null);
     vi.mocked(userRepository.getUserByUsername).mockResolvedValueOnce(testUser);
 
-    expect(() => userService.createUser({
+    await expect(() => userService.createUser({
       username: testUser.username,
       displayName: testUser.displayName,
       emailAddress: testUser.emailAddress,
@@ -107,14 +107,14 @@ describe('UserService', () => {
     })).rejects.toThrowError(userErrors.USERNAME_NOT_AVAILABLE);
   });
 
-  it('should throw error if unable to create user', () => {
+  it('should throw error if unable to create user', async () => {
     vi.mocked(userRepository.getUserByEmailAddress).mockResolvedValueOnce(null);
     vi.mocked(userRepository.getUserByUsername).mockResolvedValueOnce(null);
     vi.mocked(idProvider.generateId).mockReturnValueOnce(testUser.id);
     vi.mocked(passwordProvider.hashPassword).mockResolvedValueOnce(testUser.passwordHash);
     vi.mocked(userRepository.createUser).mockRejectedValueOnce(new Error());
 
-    expect(() => userService.createUser({
+    await expect(() => userService.createUser({
       username: testUser.username,
       displayName: testUser.displayName,
       emailAddress: testUser.emailAddress,
@@ -133,19 +133,19 @@ describe('UserService', () => {
     expect(user).toEqual(testUser);
   });
 
-  it('should throw error if user being updated cannot be found', () => {
+  it('should throw error if user being updated cannot be found', async () => {
     vi.mocked(userRepository.getUserById).mockResolvedValueOnce(null);
 
-    expect(() => userService.updateUser(testUser.id, {
+    await expect(() => userService.updateUser(testUser.id, {
       displayName: testUser.displayName,
     })).rejects.toThrowError(userErrors.UNABLE_TO_GET_USER);
   });
 
-  it('should throw error if unable to update user', () => {
+  it('should throw error if unable to update user', async () => {
     vi.mocked(userRepository.getUserById).mockResolvedValueOnce(testUser);
     vi.mocked(userRepository.updateUser).mockRejectedValueOnce(new Error());
 
-    expect(() => userService.updateUser(testUser.id, {
+    await expect(() => userService.updateUser(testUser.id, {
       displayName: testUser.displayName,
     })).rejects.toThrowError(userErrors.UNABLE_TO_UPDATE_USER);
   });

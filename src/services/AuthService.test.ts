@@ -50,20 +50,20 @@ describe('AuthService', () => {
     expect(token).toBe(mockToken);
   });
 
-  it('should throw error if user being authenticated cannot be found', () => {
+  it('should throw error if user being authenticated cannot be found', async () => {
     vi.mocked(userRepository.getUserByUsername).mockResolvedValueOnce(null);
 
-    expect(() => authService.authenticateUser({
+    await expect(() => authService.authenticateUser({
       username: testUser.username,
       password: testUser.passwordHash,
     })).rejects.toThrowError(authErrors.USER_NOT_FOUND);
   });
 
-  it('should throw error if incorrect password is used', () => {
+  it('should throw error if incorrect password is used', async () => {
     vi.mocked(userRepository.getUserByUsername).mockResolvedValueOnce(testUser);
     vi.mocked(passwordProvider.compare).mockResolvedValueOnce(false);
 
-    expect(() => authService.authenticateUser({
+    await expect(() => authService.authenticateUser({
       username: testUser.username,
       password: testUser.passwordHash,
     })).rejects.toThrowError(authErrors.INCORRECT_CREDENTIALS);
