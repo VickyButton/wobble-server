@@ -9,6 +9,17 @@ export const messageErrors = {
   UNABLE_TO_DELETE_MESSAGE: 'UNABLE_TO_DELETE_MESSAGE',
 };
 
+export interface CreateMessageOptions {
+  parentId?: string;
+  userId: string;
+  roomId: string;
+  body: string;
+}
+
+export interface UpdateMessageOptions {
+  body: string;
+}
+
 export class MessageService {
   private readonly idProvider: IdProvider;
   private readonly dateTimeProvider: DateTimeProvider;
@@ -52,12 +63,7 @@ export class MessageService {
     }
   }
 
-  public async createMessage({ parentId, userId, roomId, body }: {
-    parentId?: string;
-    userId: string;
-    roomId: string;
-    body: string;
-  }) {
+  public async createMessage({ parentId, userId, roomId, body }: CreateMessageOptions) {
     const id = this.idProvider.generateId();
     const createdAt = this.dateTimeProvider.now;
     const updatedAt = createdAt;
@@ -77,9 +83,7 @@ export class MessageService {
     }
   }
 
-  public async updateMessage(id: string, { body }: {
-    body: string;
-  }) {
+  public async updateMessage(id: string, { body }: UpdateMessageOptions) {
     const message = await this.messageRepository.getMessageById(id);
 
     if (!message) {
