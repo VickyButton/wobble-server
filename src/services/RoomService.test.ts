@@ -5,7 +5,7 @@ const idProvider = {
   generateId: vi.fn(),
 };
 const dateTimeProvider = {
-  now: vi.fn(),
+  now: -1,
 };
 const roomRepository = {
   getRoomById: vi.fn(),
@@ -53,7 +53,6 @@ describe('RoomService', () => {
 
   it('should create room', async () => {
     vi.mocked(idProvider.generateId).mockReturnValueOnce(testRoom.id);
-    vi.mocked(dateTimeProvider.now).mockReturnValueOnce(testRoom.createdAt);
     vi.mocked(roomRepository.createRoom).mockImplementation((room) => room);
 
     const room = await roomService.createRoom({
@@ -65,7 +64,6 @@ describe('RoomService', () => {
 
   it('should throw error if unable to create room', () => {
     vi.mocked(idProvider.generateId).mockReturnValueOnce(testRoom.id);
-    vi.mocked(dateTimeProvider.now).mockReturnValueOnce(testRoom.createdAt);
     vi.mocked(roomRepository.createRoom).mockRejectedValueOnce(new Error());
 
     expect(() => roomService.createRoom({
@@ -75,7 +73,6 @@ describe('RoomService', () => {
 
   it('should update room', async () => {
     vi.mocked(roomRepository.getRoomById).mockResolvedValueOnce(testRoom);
-    vi.mocked(dateTimeProvider.now).mockReturnValueOnce(testRoom.createdAt);
     vi.mocked(roomRepository.updateRoom).mockImplementation((room) => room);
 
     const room = await roomService.updateRoom(testRoom.id, {
@@ -95,7 +92,6 @@ describe('RoomService', () => {
 
   it('should throw error if unable to update room', () => {
     vi.mocked(roomRepository.getRoomById).mockResolvedValueOnce(testRoom);
-    vi.mocked(dateTimeProvider.now).mockReturnValueOnce(testRoom.createdAt);
     vi.mocked(roomRepository.updateRoom).mockRejectedValueOnce(new Error());
 
     expect(() => roomService.updateRoom(testRoom.id, {

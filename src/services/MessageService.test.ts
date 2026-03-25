@@ -5,7 +5,7 @@ const idProvider = {
   generateId: vi.fn(),
 };
 const dateTimeProvider = {
-  now: vi.fn(),
+  now: -1,
 };
 const messageRepository = {
   getMessagesByParentId: vi.fn(),
@@ -92,7 +92,6 @@ describe('MessageService', () => {
 
   it('should create message', async () => {
     vi.mocked(idProvider.generateId).mockReturnValueOnce(testMessage.id);
-    vi.mocked(dateTimeProvider.now).mockReturnValueOnce(testMessage.createdAt);
     vi.mocked(messageRepository.createMessage).mockImplementationOnce((message) => message);
 
     const message = await messageService.createMessage({
@@ -107,7 +106,6 @@ describe('MessageService', () => {
 
   it('should throw error if unable to create message', () => {
     vi.mocked(idProvider.generateId).mockReturnValueOnce(testMessage.id);
-    vi.mocked(dateTimeProvider.now).mockReturnValueOnce(testMessage.createdAt);
     vi.mocked(messageRepository.createMessage).mockRejectedValueOnce(new Error());
 
     expect(() => messageService.createMessage({
@@ -120,7 +118,6 @@ describe('MessageService', () => {
 
   it('should update message', async () => {
     vi.mocked(messageRepository.getMessageById).mockResolvedValueOnce(testMessage);
-    vi.mocked(dateTimeProvider.now).mockReturnValueOnce(testMessage.createdAt);
     vi.mocked(messageRepository.updateMessage).mockImplementation((message) => message);
 
     const message = await messageService.updateMessage(testMessage.id, {
@@ -140,7 +137,6 @@ describe('MessageService', () => {
 
   it('should throw error if unable to update message', async () => {
     vi.mocked(messageRepository.getMessageById).mockResolvedValueOnce(testMessage);
-    vi.mocked(dateTimeProvider.now).mockReturnValueOnce(testMessage.createdAt);
     vi.mocked(messageRepository.updateMessage).mockRejectedValueOnce(new Error());
 
     expect(() => messageService.updateMessage(testMessage.id, {

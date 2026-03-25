@@ -9,7 +9,7 @@ const passwordProvider = {
   compare: vi.fn(),
 };
 const dateTimeProvider = {
-  now: vi.fn(),
+  now: -1,
 };
 const userRepository = {
   getUsers: vi.fn(),
@@ -72,7 +72,6 @@ describe('UserService', () => {
     vi.mocked(userRepository.getUserByUsername).mockResolvedValueOnce(null);
     vi.mocked(idProvider.generateId).mockReturnValueOnce(testUser.id);
     vi.mocked(passwordProvider.hashPassword).mockResolvedValueOnce(testUser.passwordHash);
-    vi.mocked(dateTimeProvider.now).mockReturnValueOnce(testUser.createdAt);
     vi.mocked(userRepository.createUser).mockImplementationOnce((user) => user);
 
     const user = await userService.createUser({
@@ -113,7 +112,6 @@ describe('UserService', () => {
     vi.mocked(userRepository.getUserByUsername).mockResolvedValueOnce(null);
     vi.mocked(idProvider.generateId).mockReturnValueOnce(testUser.id);
     vi.mocked(passwordProvider.hashPassword).mockResolvedValueOnce(testUser.passwordHash);
-    vi.mocked(dateTimeProvider.now).mockReturnValueOnce(testUser.createdAt);
     vi.mocked(userRepository.createUser).mockRejectedValueOnce(new Error());
 
     expect(() => userService.createUser({
@@ -126,7 +124,6 @@ describe('UserService', () => {
 
   it('should update user', async () => {
     vi.mocked(userRepository.getUserById).mockResolvedValueOnce(testUser);
-    vi.mocked(dateTimeProvider.now).mockReturnValueOnce(testUser.createdAt);
     vi.mocked(userRepository.updateUser).mockImplementation((user) => user);
 
     const user = await userService.updateUser(testUser.id, {
@@ -146,7 +143,6 @@ describe('UserService', () => {
 
   it('should throw error if unable to update user', () => {
     vi.mocked(userRepository.getUserById).mockResolvedValueOnce(testUser);
-    vi.mocked(dateTimeProvider.now).mockReturnValueOnce(testUser.createdAt);
     vi.mocked(userRepository.updateUser).mockRejectedValueOnce(new Error());
 
     expect(() => userService.updateUser(testUser.id, {
