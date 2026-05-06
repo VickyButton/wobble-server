@@ -1,7 +1,8 @@
+import type { UserService } from '../../services/UserService';
 import type { UserValidator } from '../../validators/UserValidator';
 import type { UserController } from '../UserController';
 import type { H3Event } from 'h3';
-import { userErrors, type UserService } from '../../services/UserService';
+import { userErrors } from '../../services/UserService';
 import { defineEventHandler, getRouterParams, HTTPError, readBody } from 'h3';
 
 const errorText = {
